@@ -1,7 +1,12 @@
-@(message: String)
+@(currencyForm:Form[CurrencyData])(implicit m: Messages)
+
+@import helper._
 
 @main("Welcome to Play") {
-
-    @* @play20.welcome(message) *@
-    @message
+  <h1>Currency Form</h1>
+  @form(action=routes.Application.currencyPost()) {
+    @inputText(currencyForm("eur"))
+    @inputText(currencyForm("usd"))
+    <input type="submit" value="Calculate" />
+  }
 }
