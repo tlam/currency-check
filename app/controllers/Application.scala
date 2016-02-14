@@ -24,7 +24,7 @@ class Application @Inject() (val messagesApi: MessagesApi, ws: WSClient) extends
   def currencyPost = Action { implicit request => 
     currencyForm.bindFromRequest().fold(
       formWithErrors => BadRequest(views.html.index(formWithErrors)),
-      currency => Ok("Calculated"))
+      currency => Ok(s"Calculated EUR ${currency.eur}"))
   }
 
   def index = Action {
