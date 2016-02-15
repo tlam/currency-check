@@ -3,6 +3,7 @@ package controllers
 import javax.inject.Inject
 import scala.concurrent.Future
 
+import models.CurrencyHistory
 import play.api._
 import play.api.data._
 import play.api.data.Forms._
@@ -33,7 +34,7 @@ class Application @Inject() (val messagesApi: MessagesApi, ws: WSClient) extends
 
   def getCurrencies = Action.async { request =>
     implicit val context = play.api.libs.concurrent.Execution.Implicits.defaultContext
-    val request: WSRequest = ws.url("http://api.fixer.io/2014-12-12?base=CAD")
+    /*
     implicit val currencyReads = Json.reads[Currency]
     val futureResult: Future[JsResult[Currency]] = request.get().map {
       response => (response.json).validate[Currency]
@@ -46,6 +47,8 @@ class Application @Inject() (val messagesApi: MessagesApi, ws: WSClient) extends
     //val baseResult: JsResult[String] = response.validate[String](baseReads)
     val futureResponse: Future[WSResponse] = request.get()
     futureResponse.map{
+    */
+    CurrencyHistory.currency.map{
       jsResponse => Ok(jsResponse.body).as("application/json")
     }
   }
