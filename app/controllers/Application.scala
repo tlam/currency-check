@@ -18,14 +18,14 @@ case class Currency(base: String, date: String)
 
 class Application @Inject() (val messagesApi: MessagesApi, ws: WSClient) extends Controller with I18nSupport {
   val currencyForm = Form(mapping(
-      "eur" -> of[Double],
-      "usd" -> of[Double]
+      "eur" -> default(of[Double], 0.0),
+      "usd" -> default(of[Double], 0.0)
     )(CurrencyData.apply)(CurrencyData.unapply))
 
   def currencyPost = Action { implicit request => 
     currencyForm.bindFromRequest().fold(
       formWithErrors => BadRequest(views.html.index(formWithErrors)),
-      currency => Ok(s"Calculated EUR ${currency.eur}"))
+      currency => Ok(CurrencyHistory.calculate(currency.eur, currency.usd)))
   }
 
   def index = Action {
@@ -48,7 +48,8 @@ class Application @Inject() (val messagesApi: MessagesApi, ws: WSClient) extends
     val futureResponse: Future[WSResponse] = request.get()
     futureResponse.map{
     */
-    CurrencyHistory.currency.map{
+    val date = "2014-12-12"
+    CurrencyHistory.currency(date).map{
       jsResponse => Ok(jsResponse.body).as("application/json")
     }
   }
